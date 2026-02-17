@@ -111,6 +111,16 @@ def main():
         # Notice: resize_token_embeddings expect to receive the full size of the new vocabulary, i.e., the length of the tokenizer.
         model.resize_token_embeddings(len(tokenizer))
 
+    # if the model is encoder-decoder, force bos_token_id needs to be set
+    if model_args.encoder_decoder_type == "nllb":
+        # if all the pairs are to the same language
+        if all([lg_pair.split("-")[1] == pairs[0].split("-")[1] for lg_pair in pairs]):
+            model.config.forced_bos_token_id = tokenizer.convert_tokens_to_ids([NLLB_CODE[pairs[0].split("-")[1]]])
+            logger.info(f"Set forced_bos_token_id to {model.config.forced_bos_token_id} corresponding to {pairs[0].split('-')[1]} for NLLB.")
+        else:
+            logger.warning("For NLLB, all pairs should be to the same language. Setting forced_bos_token_id to None.")
+            model.config.forced_bos_token_id = None    
+            
     # Initialize our Trainer
     trainer = LlmmtTrainer(
         model=model,
