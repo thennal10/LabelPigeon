@@ -3,7 +3,6 @@ import os
 from itertools import chain
 import torch
 from datasets import load_dataset
-
 import transformers
 from transformers import (
     CONFIG_MAPPING,
@@ -146,6 +145,14 @@ LANG_TABLE = {
     "ar": "Arabic",
     "he": "Hebrew",
     "fa": "Persian",
+    # extra
+    "gr": "Greek",
+    "cu": "Church Slavic",
+    "ceb": "Cebuano",
+    "hr": "Croatian",
+    "sk": "Slovak",
+    "tl": "Tagalog",
+    
 }
 
 NLLB_CODE = {
@@ -207,6 +214,14 @@ NLLB_CODE = {
     "ar": "arb_Arab",
     "he": "heb_Hebr",
     "fa": "pes_Arab",
+    # Extra
+    "gr": "ell_Grek",
+    "cu": "chu_Cyrl",
+    "ceb": "ceb_Latn",
+    "hr": "hrv_Latn",
+    "sk": "slk_Latn",
+    "tl": "tgl_Latn",
+
 }
 
 ISO1_ISO3_map = {
@@ -671,9 +686,17 @@ def get_preprocessed_data(train_raw_data, valid_raw_data, test_raw_data, pairs, 
                 inputs.append(inp)
                 targets.append(ex[source_lang])
                 lang_pairs.append((target_lang, source_lang))
-        # do tokenization one by one if there are multiple language pairs
+        # If we have multiple language pairs, do tokenization one by one
         if len(set(lang_pairs)) > 1:
-            raise ValueError("Multiple language pairs are not supported.")
+            model_inputs = []
+            labels = []
+            for inp, target, lang_pair in zip(inputs, targets, lang_pairs):
+                src_lang, tgt_lang = lang_pair
+                tokenizer.src_lang, tokenizer.tgt_lang = NLLB_CODE[src_lang], NLLB_CODE[tgt_lang]
+                model_inputs.append(tokenizer(inp, max_length=data_args.max_source_length, padding=padding, truncation=True, add_special_tokens=True))
+                labels.append(tokenizer(target, max_length=data_args.max_new_tokens, padding=padding, truncation=True, add_special_tokens=True))
+            model_inputs = tokenizer.pad(model_inputs, padding=padding, max_length=data_args.max_source_length, return_tensors="pt")
+            labels = tokenizer.pad(labels, padding=padding, max_length=data_args.max_new_tokens, return_tensors="pt")
         else:
             src_lang, tgt_lang = lang_pairs[0]
             tokenizer.src_lang, tokenizer.tgt_lang = NLLB_CODE[src_lang], NLLB_CODE[tgt_lang]
@@ -741,7 +764,11 @@ def get_preprocessed_data(train_raw_data, valid_raw_data, test_raw_data, pairs, 
         original_padding_side = tokenizer.padding_side
         if original_padding_side != "left":
             tokenizer.padding_side = "left"
-        model_inputs = tokenizer(prompts, max_length=data_args.max_source_length, padding=padding, truncation=True, add_special_tokens=True if not model_args.chat_style else False)
+        if model_args.encoder_decoder_type:
+            tokenizer.src_lang, tokenizer.tgt_lang = NLLB_CODE[source_lang], NLLB_CODE[target_lang]
+            model_inputs = tokenizer(prompts, max_length=data_args.max_source_length, padding=padding, truncation=True, add_special_tokens=False)
+        else:
+            model_inputs = tokenizer(prompts, max_length=data_args.max_source_length, padding=padding, truncation=True, add_special_tokens=True if not model_args.chat_style else False)
         tokenizer.padding_side = original_padding_side
         if data_args.use_prefix_lm:
             model_inputs["prefix_mask"] = []

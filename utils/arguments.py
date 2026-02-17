@@ -337,6 +337,16 @@ class DataTrainingArguments:
         },
     )
 
+    eval_data_path: Optional[str] = field(
+        default=None,
+        metadata={"help": "The path for evaluation data parent folder"}
+    )
+    
+    eval_datasets: Optional[str] = field(
+        default=None,
+        metadata={"help": "The comma-seperated list of evaluation datasets, e.g., 'MLQA,'"}
+    )
+    
     # predict_source_lang: str = field(default="", metadata={"help": "The source language for testing"})
     # predict_target_lang: str = field(default="en", metadata={"help": "The target language for testing"})
 

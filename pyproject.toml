@@ -1,24 +1,37 @@
 [project]
-name = "alma"
+name = "labelpigeon"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "accelerate==0.34.2",
+    "beautifulsoup4>=4.13.4",
+    "conllu>=6.0.0",
     "datasets>=3.6.0",
     "deepspeed==0.15.1",
+    "dotenv>=0.9.9",
     "einops>=0.8.1",
     "evaluate>=0.4.4",
+    "flash-attn>=2.8.2",
     "ipykernel>=6.29.5",
     "ipython>=9.4.0",
+    "jieba>=0.42.1",
     "jsonlines>=4.0.0",
     "matplotlib>=3.10.3",
+    "nltk>=3.9.1",
     "peft==0.13.0",
+    "protobuf==4.25.0",
+    "pyicu>=2.15.2",
     "sacrebleu>=2.5.1",
+    "seaborn>=0.13.2",
     "sentencepiece>=0.2.0",
+    "seqeval>=1.2.2",
+    "streamlit>=1.48.0",
     "transformers==4.51.1",
+    "triton==3.1",
     "trl>=0.18.2",
+    "udapi>=0.4.0",
     "unbabel-comet>=2.2.6",
     "wandb>=0.20.1",
     "zstandard>=0.23.0",
