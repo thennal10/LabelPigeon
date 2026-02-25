@@ -21,6 +21,7 @@ uv sync # alternatively, use 'pip install -r requirements.txt'
 
 ### Basic Usage
 
+The trained model is available on huggingface, at [thennal/nllb-200-3.3B-labelpigeon](https://huggingface.co/thennal/nllb-200-3.3B-labelpigeon).
 ```python
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
@@ -36,11 +37,12 @@ inputs = tokenizer(source_text, return_tensors="pt", src_lang="eng_Latn")
 outputs = model.generate(**inputs, forced_bos_token_id=tokenizer.lang_code_to_id["deu_Latn"])
 translated = tokenizer.decode(outputs[0], skip_special_tokens=True)
 ```
-## Evaluation
 
-### Dataset Converters
+## Datasets
 
-Convert existing datasets to XML-tagged format for training or evaluation:
+Training uses the [SalesForce XML](https://github.com/salesforce/localization-xml-mt) dataset, while direct evaluation uses [XQuAD](https://github.com/google-deepmind/xquad) and [MLQA](https://github.com/facebookresearch/MLQA), each available in their respective repos.
+
+Once downloaded, convert them to marker-tagged format for training or evaluation:
 
 ```bash
 # Convert MLQA dataset
@@ -68,6 +70,16 @@ python -m dataset_converters.salesforce_xml_convert \
   --remap True
 ```
 
+## Training
+
+Fine-tune your own LabelPigeon model on XML-tagged data, after converting:
+
+```
+python run_llmmt.py configs/training/nllb.yaml
+```
+
+## Evaluation
+
 ### Direct Label Projection Evaluation
 
 Evaluate label projection accuracy on parallel annotated datasets, after converting:
@@ -88,15 +100,7 @@ python -m evals.translation_eval configs/eval/lp_translate_eval.yaml
 
 ### Downstream Evaluation
 
-Downstream evaluation depends on external data and repositories. Sample scripts for converting datasets are provided in `evals/dataset_lp`.
-## Training
-
-Fine-tune your own LabelPigeon model on XML-tagged data, after converting:
-
-```
-python run_llmmt.py configs/training/nllb.yaml
-```
-
+Downstream evaluation depends on external data and repositories, some proprietary. However, we include sample scripts for translating the datasets in `evals/dataset_lp`.
 ## Project Structure
 
 ```
