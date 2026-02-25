@@ -1,7 +1,5 @@
 # LabelPigeon
 
-**Just Use XML: Revisiting Joint Translation and Label Projection**
-
 LabelPigeon is a simple yet effective approach for jointly performing machine translation and cross-lingual label projection using XML tags. By fine-tuning NLLB-200 3.3B on XML-tagged parallel data, LabelPigeon transfers span-level annotations (entities, arguments, mentions, etc.) across languages while maintaining or improving translation quality in a single forward pass.
 
 ## Key Features
