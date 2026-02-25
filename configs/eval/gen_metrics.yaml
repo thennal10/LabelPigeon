@@ -1,0 +1,13 @@
+reference_dirs: # the dataset dirs
+  - ./evaluation_data/XQUAD_xml
+
+hypothesis_dirs: # results from evals/direct_eval.py should be here
+  - ./outputs/labelpigeon
+
+# If you're using square bracket as a marker, this model will translate the marked instances for fuzzy string matching as per EasyProject
+mt_model_name: null
+
+# If you're using alignment-based evaluation, this model will be used to align the source and target sentences
+alignment_model_name: null
+
+fuzzy_threshold: 0.5

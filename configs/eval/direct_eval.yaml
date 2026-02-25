@@ -1,0 +1,12 @@
+model_names_or_paths: thennal/nllb-200-3.3B-labelpigeon
+output_dirs: ./outputs/labelpigeon
+eval_data_path: evaluation_data/
+eval_datasets: XQUAD_xml,MLQA_xml
+reverse: true
+
+torch_dtype: bfloat16
+max_new_tokens: 512
+max_source_length: 512
+num_beams: 1
+batch_size: 16
+seed: 42
