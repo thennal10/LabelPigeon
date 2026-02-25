@@ -1,5 +1,5 @@
 # Generate the predictions for direct evaluation. Assumes already marker-formatted datasets, and
-# requires you to run generate_metrics.py separately to get the final evaluation scores.
+# requires you to run generate_metrics_direct.py separately to get the final evaluation scores.
  
 import sys
 import torch
