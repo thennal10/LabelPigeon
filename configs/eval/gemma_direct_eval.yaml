@@ -1,0 +1,14 @@
+model_names_or_paths: google/gemma-3-27b-it 
+model_type: causal
+output_dirs: ./outputs/xml/gemma-3-27b 
+eval_data_path: evaluation_data/
+eval_datasets: XQUAD_xml,MLQA_xml 
+reverse: true
+
+torch_dtype: bfloat16
+max_new_tokens: 512
+max_source_length: 512
+num_beams: 1
+batch_size: 16
+seed: 42
+prompt_template: "Translate the following {src_lang} source text to {tgt_lang}:\n{src_lang}: {text}\n{tgt_lang}: "

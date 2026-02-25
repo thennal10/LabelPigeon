@@ -1,4 +1,5 @@
 model_names_or_paths: thennal/nllb-200-3.3B-labelpigeon
+model_type: seq2seq
 output_dirs: ./outputs/labelpigeon
 eval_data_path: evaluation_data/
 eval_datasets: XQUAD_xml,MLQA_xml
