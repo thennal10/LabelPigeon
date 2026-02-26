@@ -29,12 +29,13 @@ from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 model = AutoModelForSeq2SeqLM.from_pretrained("thennal/nllb-200-3.3B-labelpigeon")
 tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-3.3B")
 
-# Prepare tagged input (source language: English, target: German)
+# Prepare tagged input
+tokenizer.src_lang = "eng_Latn"
 source_text = "The <a>Eiffel Tower</a> is located in <b>Paris</b>, <c>France</c>."
-inputs = tokenizer(source_text, return_tensors="pt", src_lang="eng_Latn")
+inputs = tokenizer(source_text, return_tensors="pt")
 
-# Translate with label projection
-outputs = model.generate(**inputs, forced_bos_token_id=tokenizer.lang_code_to_id["deu_Latn"])
+# Translate with label projection, make sure to set the forced_bos_token_id to the target language
+outputs = model.generate(**inputs, forced_bos_token_id=tokenizer.convert_tokens_to_ids("deu_Latn"))
 translated = tokenizer.decode(outputs[0], skip_special_tokens=True)
 ```
 
@@ -95,7 +96,7 @@ python -m evals.generate_metrics_direct configs/eval/gen_metrics.yaml
 ### Translation Quality Evaluation
 
 ```bash
-python -m evals.translation_eval configs/eval/lp_translate_eval.yaml
+python -m evals.translation_eval
 ```
 
 ### Downstream Evaluation
