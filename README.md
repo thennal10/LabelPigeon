@@ -133,3 +133,17 @@ LabelPigeon/
 └── README.md                    
 ```
 
+## Citation
+If you use this codebase in your work, please consider citing our paper:
+```
+@misc{k2026justusexmlrevisiting,
+      title={Just Use XML: Revisiting Joint Translation and Label Projection}, 
+      author={Thennal D K and Chris Biemann and Hans Ole Hatzel},
+      year={2026},
+      eprint={2603.12021},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2603.12021}, 
+}
+```
+
